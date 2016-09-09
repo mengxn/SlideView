@@ -7,11 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private RecyclerView mRecyclerView;
 
@@ -37,12 +38,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View view = getLayoutInflater().inflate(R.layout.item_main, null);
-                return new MyViewHolder(view);
+                SlideView slideView = new SlideView(MainActivity.this);
+                slideView.setContentView(view);
+                return new MyViewHolder(slideView);
             }
 
             @Override
             public void onBindViewHolder(MyViewHolder holder, int position) {
                 holder.mName.setText(datas.get(position));
+                holder.mDelete.setOnClickListener(MainActivity.this);
             }
 
             @Override
@@ -52,15 +56,24 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.delete:
+                Toast.makeText(this, "delete", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView mName;
+        TextView mDelete;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             mName = (TextView) itemView.findViewById(R.id.name);
+            mDelete = (TextView) itemView.findViewById(R.id.delete);
         }
     }
 }
