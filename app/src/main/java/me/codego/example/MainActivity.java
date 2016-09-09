@@ -12,9 +12,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, SlideView.OnSlideListener {
 
     private RecyclerView mRecyclerView;
+    private SlideView mLastSlideViewWithStatusOn;
 
     private List<String> datas;
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 View view = getLayoutInflater().inflate(R.layout.item_main, null);
                 SlideView slideView = new SlideView(MainActivity.this);
                 slideView.setContentView(view);
+                slideView.setOnSlideListener(MainActivity.this);
                 return new MyViewHolder(slideView);
             }
 
@@ -62,6 +64,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.delete:
                 Toast.makeText(this, "delete", Toast.LENGTH_SHORT).show();
                 break;
+        }
+    }
+
+    @Override
+    public void onSlide(View view, int status) {
+        if (mLastSlideViewWithStatusOn != null && mLastSlideViewWithStatusOn != view) {
+            mLastSlideViewWithStatusOn.shrink();
+        }
+
+        if (status == SLIDE_STATUS_ON) {
+            mLastSlideViewWithStatusOn = (SlideView) view;
         }
     }
 
