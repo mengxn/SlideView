@@ -7,7 +7,7 @@
 原作者是通过重写ListView和ItemView来实现功能的，感觉以后使用的话不方便，所以把所有的逻辑都放在了SlideView中。
 
 ### 使用
-将原有view加入到SlideView中就可以了
+在getView中，将原有itemView加入到SlideView中,并将SlideView返回就可以了
 ```
 SlideView slideView = new SlideView(this);
 slideView.setContentView(view);
