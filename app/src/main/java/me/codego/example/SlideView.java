@@ -2,13 +2,14 @@ package me.codego.example;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Scroller;
+
+import static me.codego.example.R.id.holder;
 
 /**
  * Created by mengxn on 16-9-9.
@@ -16,6 +17,8 @@ import android.widget.Scroller;
 public class SlideView extends LinearLayout {
 
     private FrameLayout mViewContent;
+    private ViewGroup mContentView;
+    private ViewGroup mHolderView;
     private int mHolderWidth = 120;
 
     private int mLastX = 0;
@@ -46,17 +49,33 @@ public class SlideView extends LinearLayout {
         super(context, attrs);
         mScroller = new Scroller(getContext());
         setOrientation(HORIZONTAL);
-        View.inflate(context, R.layout.layout_slide_item, this);
-        mViewContent = (FrameLayout) findViewById(R.id.content);
+        /*View.inflate(context, R.layout.layout_slide_item, this);
+        mViewContent = (FrameLayout) findViewById(R.id.content);*/
 
-        mHolderWidth = Math.round(TypedValue.applyDimension(
+       /* mHolderWidth = Math.round(TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, mHolderWidth, getResources()
-                        .getDisplayMetrics()));
+                        .getDisplayMetrics()));*/
 
     }
 
     public void setContentView(View view) {
         mViewContent.addView(view);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        View contentView = findViewById(R.id.content);
+        if (contentView == null || !(contentView instanceof ViewGroup)) {
+            throw new IllegalArgumentException("please check id #content");
+        }
+        mContentView = (ViewGroup) contentView;
+
+        View holderView = findViewById(holder);
+        if (holderView == null || !(holderView instanceof ViewGroup)) {
+            throw new IllegalArgumentException("please check id #holder");
+        }
+        mHolderView = (ViewGroup) holderView;
     }
 
     public void setOnSlideListener(OnSlideListener onSlideListener) {
@@ -65,7 +84,6 @@ public class SlideView extends LinearLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.d("SlideView", "event.getAction():" + event.getAction());
         int x = (int) event.getX();
         int y = (int) event.getY();
         int scrollX = getScrollX();
@@ -79,6 +97,7 @@ public class SlideView extends LinearLayout {
                 if (onSlideListener != null) {
                     onSlideListener.onSlide(this, OnSlideListener.SLIDE_STATUS_START_SCROLL);
                 }
+                mHolderWidth = mHolderView.getMeasuredWidth();
                 return true;
             case MotionEvent.ACTION_MOVE: {
                 int deltaX = x - mLastX;
