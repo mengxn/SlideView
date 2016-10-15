@@ -1,55 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<me.codego.example.SlideView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@id/content"
+    <TextView
+        android:id="@+id/name"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="20dp"
+        android:textSize="15sp"/>
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="20dp"
-            android:paddingLeft="15dp"
-            android:paddingTop="20dp"
-            android:textSize="15sp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/name"
+        android:background="#666"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_below="@+id/name"
-            android:background="#666"/>
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@id/holder"
-        android:layout_width="160dp"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:background="#636363">
-
-        <TextView
-            android:id="@+id/delete"
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="删除"
-            android:textColor="#FFF"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="编辑"
-            android:textColor="#FFF"
-            android:textSize="16sp"/>
-
-    </LinearLayout>
-
-</me.codego.example.SlideView>
+</RelativeLayout>

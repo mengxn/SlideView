@@ -38,9 +38,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                SlideView slideView = (SlideView) getLayoutInflater().inflate(R.layout.item_main, null);
-                /*SlideView slideView = new SlideView(MainActivity.this);
-                slideView.setContentView(view);*/
+                //方式一
+//                SlideView slideView = (SlideView) getLayoutInflater().inflate(R.layout.item_main_custom, null);
+                //方式二
+                View view = getLayoutInflater().inflate(R.layout.item_main, null);
+                SlideView slideView = new SlideView(MainActivity.this);
+                slideView.setContentView(view);
+
                 slideView.setOnSlideListener(MainActivity.this);
                 return new MyViewHolder(slideView);
             }

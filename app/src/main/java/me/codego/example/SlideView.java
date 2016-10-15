@@ -9,14 +9,11 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Scroller;
 
-import static me.codego.example.R.id.holder;
-
 /**
  * Created by mengxn on 16-9-9.
  */
 public class SlideView extends LinearLayout {
 
-    private FrameLayout mViewContent;
     private ViewGroup mContentView;
     private ViewGroup mHolderView;
     private int mHolderWidth = 120;
@@ -43,23 +40,19 @@ public class SlideView extends LinearLayout {
 
     public SlideView(Context context) {
         this(context, null);
+        View.inflate(context, R.layout.layout_slide_item, this);
+        mContentView = (FrameLayout) findViewById(R.id.content);
+        mHolderView = (ViewGroup) findViewById(R.id.holder);
     }
 
     public SlideView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mScroller = new Scroller(getContext());
         setOrientation(HORIZONTAL);
-        /*View.inflate(context, R.layout.layout_slide_item, this);
-        mViewContent = (FrameLayout) findViewById(R.id.content);*/
-
-       /* mHolderWidth = Math.round(TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, mHolderWidth, getResources()
-                        .getDisplayMetrics()));*/
-
     }
 
     public void setContentView(View view) {
-        mViewContent.addView(view);
+        mContentView.addView(view);
     }
 
     @Override
@@ -71,7 +64,7 @@ public class SlideView extends LinearLayout {
         }
         mContentView = (ViewGroup) contentView;
 
-        View holderView = findViewById(holder);
+        View holderView = findViewById(R.id.holder);
         if (holderView == null || !(holderView instanceof ViewGroup)) {
             throw new IllegalArgumentException("please check id #holder");
         }
