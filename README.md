@@ -1,12 +1,12 @@
 # SlideView
-仿微信左滑listView 出现删除按钮
+仿微信左滑listView出现删除按钮。一步搞定listView滑动菜单。
 
 ### Usage
 
 #### 方式一
 
 在getView中，将原有itemView加入到SlideView中,并将SlideView返回就可以了
-```
+``` java
 SlideView slideView = new SlideView(this);
 slideView.setContentView(view);
 ```
@@ -56,4 +56,3 @@ slideView.setContentView(view);
 ### TODO
 
 - 抽取成library
-- 滑动菜单定制
