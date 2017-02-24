@@ -4,28 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@id/content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="20dp"
-            android:paddingLeft="15dp"
-            android:paddingTop="20dp"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_below="@+id/name"
-            android:background="#666"/>
-
-    </RelativeLayout>
-
     <LinearLayout
         android:id="@id/holder"
         android:layout_width="160dp"
@@ -51,5 +29,28 @@
             android:textSize="16sp"/>
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@id/content"
+        android:layout_width="match_parent"
+        android:background="#FFF"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="20dp"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_below="@+id/name"
+            android:background="#666"/>
+
+    </RelativeLayout>
 
 </me.codego.example.SlideView>

@@ -5,13 +5,6 @@
     android:layout_height="match_parent">
 
     <FrameLayout
-        android:id="@id/content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </FrameLayout>
-
-    <FrameLayout
         android:id="@id/holder"
         android:layout_width="120dp"
         android:background="#636363"
@@ -25,6 +18,14 @@
             android:textSize="16sp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@id/content"
+        android:layout_width="match_parent"
+        android:background="#FFF"
+        android:layout_height="match_parent">
 
     </FrameLayout>
 </merge>

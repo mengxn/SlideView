@@ -6,23 +6,23 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.Scroller;
 
 /**
  * Created by mengxn on 16-9-9.
  */
-public class SlideView extends LinearLayout {
+public class SlideView extends FrameLayout {
 
     private ViewGroup mContentView;
     private ViewGroup mHolderView;
     private int mHolderWidth = 120;
+    private int mContentWidth;
 
     private int mLastX = 0;
     private int mLastY = 0;
     private static final int TAN = 2;
+    private float mParallax;
+    private int AnimDuration = 300;
 
-    private Scroller mScroller;
     private OnSlideListener onSlideListener;
 
     public interface OnSlideListener {        // SlideView的三种状态：开始滑动，打开，关闭
@@ -47,12 +47,18 @@ public class SlideView extends LinearLayout {
 
     public SlideView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mScroller = new Scroller(getContext());
-        setOrientation(HORIZONTAL);
+        mParallax = 0.3f;
     }
 
     public void setContentView(View view) {
         mContentView.addView(view);
+    }
+
+    public void setParallax(float parallax) {
+        if (parallax < 0 || parallax > 1) {
+            throw new IllegalArgumentException("parallax is bettwon 0 and 1");
+        }
+        mParallax = parallax;
     }
 
     @Override
@@ -79,18 +85,16 @@ public class SlideView extends LinearLayout {
     public boolean onTouchEvent(MotionEvent event) {
         int x = (int) event.getX();
         int y = (int) event.getY();
-        int scrollX = getScrollX();
+        float scrollX = (int) mContentView.getTranslationX();
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (!mScroller.isFinished()) {
-                    mScroller.abortAnimation();
-                }
-
+                abortAnimation();
+                mHolderWidth = mHolderView.getMeasuredWidth();
+                mContentWidth = mContentView.getMeasuredWidth();
                 if (onSlideListener != null) {
                     onSlideListener.onSlide(this, OnSlideListener.SLIDE_STATUS_START_SCROLL);
                 }
-                mHolderWidth = mHolderView.getMeasuredWidth();
                 return true;
             case MotionEvent.ACTION_MOVE: {
                 int deltaX = x - mLastX;
@@ -99,14 +103,14 @@ public class SlideView extends LinearLayout {
                     break;
                 }
                 getParent().requestDisallowInterceptTouchEvent(true);
-                int newScrollX = scrollX - deltaX;
+                float newScrollX = scrollX + deltaX;
                 if (deltaX != 0) {
-                    if (newScrollX < 0) {
+                    if (newScrollX > 0) {
                         newScrollX = 0;
-                    } else if (newScrollX > mHolderWidth) {
-                        newScrollX = mHolderWidth;
+                    } else if (newScrollX < -mHolderWidth) {
+                        newScrollX = -mHolderWidth;
                     }
-                    this.scrollTo(newScrollX, 0);
+                    translationX(newScrollX, mParallax);
                 }
                 break;
             }
@@ -114,8 +118,8 @@ public class SlideView extends LinearLayout {
             case MotionEvent.ACTION_CANCEL: {
                 getParent().requestDisallowInterceptTouchEvent(false);
                 int newScrollX = 0;
-                if (scrollX - mHolderWidth * 0.75 > 0) {
-                    newScrollX = mHolderWidth;
+                if (scrollX < -mHolderWidth * 0.75) {
+                    newScrollX = -mHolderWidth;
                 }
                 this.smoothScrollTo(newScrollX, 0);
 
@@ -131,25 +135,30 @@ public class SlideView extends LinearLayout {
         return super.onTouchEvent(event);
     }
 
+    private void translationX(float translationX, float parallax) {
+        float newTranslationX = translationX;
+        if (parallax > 0) {
+            newTranslationX = -mHolderWidth * parallax + translationX * (1-parallax);
+        }
+        mHolderView.setTranslationX(mContentWidth + newTranslationX);
+        mContentView.setTranslationX(translationX);
+    }
+
     public void shrink() {
-        if (getScrollX() != 0) {
+        if (mContentView.getTranslationX() != 0) {
             this.smoothScrollTo(0, 0);
         }
     }
 
     private void smoothScrollTo(int destX, int destY) {
         // 缓慢滚动到指定位置
-        int scrollX = getScrollX();
-        int delta = destX - scrollX;
-        mScroller.startScroll(scrollX, 0, delta, 0, Math.abs(delta) * 3);
-        invalidate();
+        mHolderView.animate().translationX(mContentWidth + destX).setDuration(AnimDuration).start();
+        mContentView.animate().translationX(destX).setDuration(AnimDuration).start();
     }
 
-    @Override
-    public void computeScroll() {
-        if (mScroller.computeScrollOffset()) {
-            scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
-            postInvalidate();
-        }
+    private void abortAnimation() {
+        mHolderView.animate().cancel();
+        mContentView.animate().cancel();
     }
+
 }
