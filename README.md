@@ -19,14 +19,6 @@ slideView.setContentView(view);
     android:layout_width="match_parent"
     android:layout_height="match_parent">
   
-	<!--这里放item展示信息 -->
-    <RelativeLayout
-        android:id="@id/content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </RelativeLayout>
-  
 	<!--这里放菜单信息-->
     <LinearLayout
         android:id="@id/holder"
@@ -36,6 +28,15 @@ slideView.setContentView(view);
         android:background="#636363">
 
     </LinearLayout>
+  
+	<!--这里放item展示信息 -->
+    <RelativeLayout
+        android:id="@id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </RelativeLayout>
+
 
 </me.codego.example.SlideView>
 ```
