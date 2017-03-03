@@ -47,7 +47,7 @@ public class SlideView extends FrameLayout {
 
     public SlideView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mParallax = 0.3f;
+        mParallax = 0.0f;
     }
 
     public void setContentView(View view) {
@@ -56,7 +56,7 @@ public class SlideView extends FrameLayout {
 
     public void setParallax(float parallax) {
         if (parallax < 0 || parallax > 1) {
-            throw new IllegalArgumentException("parallax is bettwon 0 and 1");
+            throw new IllegalArgumentException("parallax is between 0 and 1");
         }
         mParallax = parallax;
     }
@@ -77,6 +77,12 @@ public class SlideView extends FrameLayout {
         mHolderView = (ViewGroup) holderView;
     }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        mHolderView.setTranslationX(mContentView.getMeasuredWidth());
+        super.onLayout(changed, left, top, right, bottom);
+    }
+
     public void setOnSlideListener(OnSlideListener onSlideListener) {
         this.onSlideListener = onSlideListener;
     }
@@ -95,6 +101,8 @@ public class SlideView extends FrameLayout {
                 if (onSlideListener != null) {
                     onSlideListener.onSlide(this, OnSlideListener.SLIDE_STATUS_START_SCROLL);
                 }
+                mLastX = x;
+                mLastY = y;
                 return true;
             case MotionEvent.ACTION_MOVE: {
                 int deltaX = x - mLastX;
