@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onBindViewHolder(MyViewHolder holder, int position) {
                 holder.mName.setText(datas.get(position));
                 holder.mDelete.setOnClickListener(MainActivity.this);
+                holder.mName.setOnClickListener(MainActivity.this);
             }
 
             @Override
@@ -66,13 +68,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.delete:
-                Toast.makeText(this, "delete", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "click delete", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.name:
+                Toast.makeText(this, "click item", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
 
     @Override
     public void onSlide(View view, int status) {
+        Log.d("MainActivity", "status:" + status);
         if (mLastSlideViewWithStatusOn != null && mLastSlideViewWithStatusOn != view) {
             mLastSlideViewWithStatusOn.shrink();
         }

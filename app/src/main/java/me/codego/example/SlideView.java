@@ -88,29 +88,44 @@ public class SlideView extends FrameLayout {
     }
 
     @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                mHolderWidth = mHolderView.getMeasuredWidth();
+                mContentWidth = mContentView.getMeasuredWidth();
+                mLastX = x;
+                mLastY = y;
+                if (onSlideListener != null) {
+                    onSlideListener.onSlide(this, OnSlideListener.SLIDE_STATUS_OFF);
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                int deltaX = x - mLastX;
+                int deltaY = y - mLastY;
+                // 如果用户在做水平滑动，拦截事件
+                if (Math.abs(deltaX) > Math.abs(deltaY) * TAN) {
+                    abortAnimation();
+                    if (onSlideListener != null) {
+                        onSlideListener.onSlide(this, OnSlideListener.SLIDE_STATUS_START_SCROLL);
+                    }
+                    getParent().requestDisallowInterceptTouchEvent(true);
+                    return true;
+                }
+                break;
+        }
+        return super.onInterceptTouchEvent(event);
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
         int x = (int) event.getX();
         int y = (int) event.getY();
         float scrollX = (int) mContentView.getTranslationX();
-
         switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                abortAnimation();
-                mHolderWidth = mHolderView.getMeasuredWidth();
-                mContentWidth = mContentView.getMeasuredWidth();
-                if (onSlideListener != null) {
-                    onSlideListener.onSlide(this, OnSlideListener.SLIDE_STATUS_START_SCROLL);
-                }
-                mLastX = x;
-                mLastY = y;
-                return true;
             case MotionEvent.ACTION_MOVE: {
                 int deltaX = x - mLastX;
-                int deltaY = y - mLastY;
-                if (Math.abs(deltaX) < Math.abs(deltaY) * TAN) {
-                    break;
-                }
-                getParent().requestDisallowInterceptTouchEvent(true);
                 float newScrollX = scrollX + deltaX;
                 if (deltaX != 0) {
                     if (newScrollX > 0) {
