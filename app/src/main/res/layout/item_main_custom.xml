@@ -5,11 +5,12 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@id/holder"
-        android:layout_width="160dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:background="#636363">
+        android:background="#636363"
+        android:orientation="horizontal">
+
+        <!-- hidden view -->
 
         <TextView
             android:id="@+id/delete"
@@ -31,17 +32,18 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <!-- content view -->
 
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="20dp"
             android:paddingLeft="15dp"
             android:paddingTop="20dp"
+            android:paddingBottom="20dp"
             android:textSize="15sp"/>
 
         <TextView

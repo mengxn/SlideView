@@ -1,10 +1,11 @@
 package me.codego.example;
 
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,10 +14,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, SlideView.OnSlideListener {
+public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private SlideView mLastSlideViewWithStatusOn;
 
     private List<String> datas;
 
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.recycler_view);
 
         datas = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
@@ -35,68 +35,82 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         LinearLayoutManager layout = new LinearLayoutManager(this);
         layout.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layout);
-        mRecyclerView.setAdapter(new RecyclerView.Adapter<MyViewHolder>() {
 
+        RecyclerView.Adapter<MyViewHolder> way1Adapter = new RecyclerView.Adapter<MyViewHolder>() {
+            @NonNull
             @Override
-            public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                //方式一
-//                SlideView slideView = (SlideView) getLayoutInflater().inflate(R.layout.item_main_custom, null);
-                //方式二
-                View view = getLayoutInflater().inflate(R.layout.item_main, null);
-                SlideView slideView = new SlideView(MainActivity.this);
-                slideView.setContentView(view);
-
-                slideView.setOnSlideListener(MainActivity.this);
+            public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                SlideView slideView = (SlideView) getLayoutInflater().inflate(R.layout.item_main_custom, null);
                 return new MyViewHolder(slideView);
             }
 
             @Override
-            public void onBindViewHolder(MyViewHolder holder, int position) {
+            public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
                 holder.mName.setText(datas.get(position));
-                holder.mDelete.setOnClickListener(MainActivity.this);
-                holder.mName.setOnClickListener(MainActivity.this);
             }
 
             @Override
             public int getItemCount() {
                 return datas.size();
             }
-        });
+        };
+
+        RecyclerView.Adapter<MyViewHolder> way2Adapter = new RecyclerView.Adapter<MyViewHolder>() {
+            @NonNull
+            @Override
+            public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = getLayoutInflater().inflate(R.layout.item_main, null);
+                SlideView slideView = new SlideView(MainActivity.this);
+                slideView.setContentView(view);
+                slideView.setParallax(0.3f);
+                return new MyViewHolder(slideView);
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
+                holder.mName.setText(datas.get(position));
+                SlideView slideView = (SlideView) holder.itemView;
+                slideView.clearOptions();
+                slideView.addOption(slideView.newOption("删除", Color.RED, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showToast("delete " + position);
+                    }
+                }));
+                if (position == 1) {
+                    // you can add option as you can
+                    slideView.addOption(slideView.newOption("哈哈哈哈", Color.BLUE, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showToast("hi " + holder.getAdapterPosition());
+                        }
+                    }));
+                }
+            }
+
+            @Override
+            public int getItemCount() {
+                return datas.size();
+            }
+        };
+
+        // way 1
+//        mRecyclerView.setAdapter(way1Adapter);
+        // way 2
+        mRecyclerView.setAdapter(way2Adapter);
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.delete:
-                Toast.makeText(this, "click delete", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.name:
-                Toast.makeText(this, "click item", Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
-
-    @Override
-    public void onSlide(View view, int status) {
-        Log.d("MainActivity", "status:" + status);
-        if (mLastSlideViewWithStatusOn != null && mLastSlideViewWithStatusOn != view) {
-            mLastSlideViewWithStatusOn.shrink();
-        }
-
-        if (status == SLIDE_STATUS_ON) {
-            mLastSlideViewWithStatusOn = (SlideView) view;
-        }
+    private void showToast(CharSequence text) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView mName;
-        TextView mDelete;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            mName = (TextView) itemView.findViewById(R.id.name);
-            mDelete = (TextView) itemView.findViewById(R.id.delete);
+            mName = itemView.findViewById(R.id.name);
         }
     }
 }
