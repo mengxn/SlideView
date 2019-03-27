@@ -14,6 +14,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.codego.slideview.SlideView;
+
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;

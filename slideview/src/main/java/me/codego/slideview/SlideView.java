@@ -1,4 +1,4 @@
-package me.codego.example;
+package me.codego.slideview;
 
 import android.content.Context;
 import android.graphics.Color;

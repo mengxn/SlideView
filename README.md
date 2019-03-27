@@ -28,7 +28,7 @@ slideView.addOption(deleteOption);
 #### 方式二
 
 ``` xml
-<me.codego.example.SlideView
+<me.codego.slideview.SlideView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -61,7 +61,7 @@ slideView.addOption(deleteOption);
 
     </RelativeLayout>
 
-</me.codego.example.SlideView>
+</me.codego.slideview.SlideView>
 ```
 
 ### TODO
