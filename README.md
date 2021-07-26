@@ -10,6 +10,23 @@
 
 ### Usage
 
+#### 引用
+```gradle
+# project build.gradle
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+# module build.gralde
+dependencies {
+    ...
+    implementation 'com.github.mengxn:SlideView:1.0'
+}
+```
+
 #### 方式一
 
 在getView中，将原有itemView加入到SlideView中,并将SlideView返回就可以了
