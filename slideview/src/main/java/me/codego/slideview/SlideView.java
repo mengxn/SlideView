@@ -100,6 +100,7 @@ public class SlideView extends FrameLayout {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         mHolderView.setTranslationX(mContentView.getMeasuredWidth());
+        mContentView.setTranslationX(0);
         super.onLayout(changed, left, top, right, bottom);
     }
 
