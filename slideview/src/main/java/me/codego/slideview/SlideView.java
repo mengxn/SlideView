@@ -150,7 +150,7 @@ public class SlideView extends FrameLayout {
         }
     }
 
-    private void shrink() {
+    public void shrink() {
         if (mContentView.getTranslationX() != 0) {
             smoothScrollTo(0);
         }
