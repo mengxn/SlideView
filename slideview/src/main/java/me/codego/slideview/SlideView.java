@@ -115,6 +115,7 @@ public class SlideView extends FrameLayout {
 
                 mLastX = x;
                 mLastY = y;
+                mGestureDetector.onTouchEvent(event);
 
                 shrinkOther();
                 break;
