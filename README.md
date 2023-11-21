@@ -23,7 +23,7 @@ allprojects {
 # module build.gralde
 dependencies {
     ...
-    implementation 'com.github.mengxn:SlideView:1.0'
+    implementation 'com.github.mengxn:SlideView:1.3'
 }
 ```
 
@@ -80,7 +80,3 @@ slideView.addOption(deleteOption);
 
 </me.codego.slideview.SlideView>
 ```
-
-### TODO
-
-- 抽取成library
